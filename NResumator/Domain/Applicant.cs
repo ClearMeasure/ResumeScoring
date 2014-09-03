@@ -45,15 +45,15 @@ namespace NResumator.Domain
         public string eeoc_disability { get; set; }
         public string eeoc_disability_signature { get; set; }
         public string eeoc_disability_date { get; set; }
-        public List<object> jobs { get; set; }
-        public List<Comment> comments { get; set; }
-        public List<object> feedback { get; set; }
-        public List<object> rating { get; set; }
+        //public List<object> jobs { get; set; }
+        //public List<Comment> comments { get; set; }
+        //public List<object> feedback { get; set; }
+        //public List<object> rating { get; set; }
         public string resume_link { get; set; }
-        public List<object> activities { get; set; }
-        public List<object> messages { get; set; }
-        public List<object> questionnaire { get; set; }
-        public List<Evaluation> evaluation { get; set; }
-        public List<object> categories { get; set; }
+        //public List<object> activities { get; set; }
+        //public List<object> messages { get; set; }
+        //public List<object> questionnaire { get; set; }
+        //public List<Evaluation> evaluation { get; set; }
+        //public List<object> categories { get; set; }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using Spire.Doc;
 using Spire.Pdf;
+
 
 namespace NResumator
 {
@@ -13,6 +16,11 @@ namespace NResumator
             if (url.ToLower().EndsWith("pdf"))
             {
                 return GetTextFromPdf(resumeFolder, url);
+            }
+
+            if (url.ToLower().EndsWith("doc") || url.ToLower().EndsWith("docx"))
+            {
+                return GetTextFromDoc(resumeFolder, url);
             }
 
             throw new ApplicationException("URL is not in a supported format");
@@ -28,19 +36,42 @@ namespace NResumator
                 PdfDocument doc = new PdfDocument();
                 doc.LoadFromFile(pdfFilePath);
 
-                StringBuilder buffer = new StringBuilder();
+                StringBuilder resume = new StringBuilder();
 
                 foreach (PdfPageBase page in doc.Pages)
                 {
-                    buffer.Append((string)page.ExtractText());
+                    resume.Append((string)page.ExtractText());
                 }
 
                 doc.Close();
 
-                return buffer.ToString();
+                return resume.ToString();
             }
 
-            throw new ApplicationException("GetTextFromPdfUrl only accepts urls that end with pdf");
+            throw new ApplicationException("GetTextFromPdf only accepts urls that end with pdf");
+        }
+
+        private static string GetTextFromDoc(string resumeFolder, string url)
+        {
+            if ((url.ToLower().EndsWith("doc") || url.ToLower().EndsWith("docx")) && url.ToLower().StartsWith("http"))
+            {
+                string docFilePath = GetFileFromUrl(resumeFolder, url);
+
+                //Open word document
+                Document document = new Document();
+                
+                document.LoadFromFile(docFilePath);
+
+                //Save doc file.
+                string txtFileName = Guid.NewGuid() + ".txt";
+                document.SaveToFile(Path.Combine(resumeFolder, txtFileName), Spire.Doc.FileFormat.Txt);
+
+                string resume = File.ReadAllText(Path.Combine(resumeFolder, txtFileName));
+
+                return resume;
+            }
+
+            throw new ApplicationException("GetTextFromDoc only accepts urls that end with doc or docx");
         }
 
         private static string GetFileFromUrl(string resumeFolder, string url)
@@ -53,7 +84,9 @@ namespace NResumator
 
                 WebClient Client = new WebClient();
                 Guid g = Guid.NewGuid();
-                string file = Path.Combine(resumeFolder, String.Format("{0}.pdf", g));
+                string ext = url.Split('.')[url.Split('.').Count() - 1];
+                string file = Path.Combine(resumeFolder, String.Format("{0}.{1}", g, ext));
+                Console.WriteLine(file);
                 Client.DownloadFile(url, file);
 
                 return file;
