@@ -1,6 +1,10 @@
 Resume Scoring
 ============
 
+Add the notion of "one of these"
+
+Use pipe | to denote this...potentially a different type
+
 The resume scoring app will evolve into two projects.
 
 1. A new applicant resume scoring component to aide in silencing the noise involved in screening new applicants
