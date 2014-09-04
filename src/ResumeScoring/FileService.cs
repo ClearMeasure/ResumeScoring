@@ -6,8 +6,7 @@ using System.Text;
 using Spire.Doc;
 using Spire.Pdf;
 
-
-namespace NResumator
+namespace ResumeScoring
 {
     public class FileService
     {

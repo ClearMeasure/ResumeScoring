@@ -30,6 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Spire.Doc">
+      <HintPath>..\packages\Spire.Doc.5.2.29\lib\net40\Spire.Doc.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License">
+      <HintPath>..\packages\Spire.Doc.5.2.29\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf">
+      <HintPath>..\packages\Spire.Doc.5.2.29\lib\net40\Spire.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -43,7 +52,12 @@
     <Compile Include="Config\ResumeScoringSection.cs" />
     <Compile Include="Config\WordGroupCollection.cs" />
     <Compile Include="Config\WordGroupConfigElement.cs" />
+    <Compile Include="FileService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScoringService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
