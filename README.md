@@ -24,20 +24,12 @@ The scoring component will need to learn over time (and by learn I mean updated 
 ### Configuration conceptually
 This app should have the ability to scan a resume for several sets of words.  Each set can have different weights and rules on whether to apply the weight on words that are found vs. words that are not found.
 
-    <resumeScoring runFrequency="4">
+    <resumeScoring>
 	    <wordGroups>
-	    	<wordGroup title="Web Programming" type="found" weight="5">
-				<words>ASP.NET, ASP.NET MVC, MVC, jquery, web forms</words>
-			</wordGroup>
-			<wordGroup title="Old Yuck Words" type="found" weight="-10">
-				<words>Access 2007, Access, Office 2010, Office 2007, Word 2010, PowerPoint, Excel</words>
-			</wordGroup>
-			<wordGroup title="Old Yuck Words" type="found" weight="-10" caseSensitive="true">
-				<words>COM, COM+, DCOM</words>
-			</wordGroup>
-			<wordGroup title="Must haves" type="absent" weight="-10">
-				<words>ReSharper, ASP.NET, jquery, SQL Server</words>
-			</wordGroup>
+	    	<add name="Web Programming" type="HIT" weight="5" words="ASP.NET, ASP.NET MVC, MVC, jquery, web forms" />
+			<add name="Old Yuck Words" type="HIT" weight="-10" words="Access 2007, Access, Office 2010, Office 2007, Word 2010, PowerPoint, Excel" />
+			<add name="Old Yuck Words" type="HIT" weight="-10" caseSensitive="true" words="COM, COM+, DCOM" />
+			<add name="Must haves" type="MISS" weight="-10" words="ReSharper, ASP.NET, jquery, SQL Server" />
 	    </wordGroups>
 	</resumeScoring>
 
