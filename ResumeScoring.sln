@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NResumator", "NResumator\NR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{7DB58C7B-698D-482E-971F-B33BECC4288F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResumeScoring", "ResumeScoring\ResumeScoring.csproj", "{13A0E7B1-40B2-43AA-A15E-41E938CCA9FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7DB58C7B-698D-482E-971F-B33BECC4288F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DB58C7B-698D-482E-971F-B33BECC4288F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DB58C7B-698D-482E-971F-B33BECC4288F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A0E7B1-40B2-43AA-A15E-41E938CCA9FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A0E7B1-40B2-43AA-A15E-41E938CCA9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A0E7B1-40B2-43AA-A15E-41E938CCA9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A0E7B1-40B2-43AA-A15E-41E938CCA9FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

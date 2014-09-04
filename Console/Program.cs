@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.IO.Ports;
 using NResumator;
 using NResumator.Domain;
+using ResumeScoring.Config;
 
 namespace ResumatorResumeScoring
 {
@@ -13,13 +15,51 @@ namespace ResumatorResumeScoring
         public const string RESUME_FOLDER = @"C:\resumes";
         static void Main(string[] args)
         {
-            Start();
+            TestConfigReader();
 
-            GetOneResume();
-            GetApplicants();
+            //Start();
+            //GetOneResume();
+            //GetApplicants();
+            //Stop();
 
             Console.ReadLine();
-            Stop();
+
+        }
+
+        private static void TestConfigReader()
+        {
+            try
+            {
+                // Get the application configuration file.
+                //System.Configuration.Configuration config =
+                //    ConfigurationManager.OpenExeConfiguration(
+                //        ConfigurationUserLevel.None) as Configuration;
+
+                // Read and display the custom section.
+                ResumeScoringSection resumeScoringSection =
+                    ConfigurationManager.GetSection("ResumeScoring") as ResumeScoringSection;
+
+                if (resumeScoringSection == null)
+                    Console.WriteLine("Failed to load UrlsSection.");
+                else
+                {
+                    Console.WriteLine("WordGroups defined in the configuration file:");
+                    for (int i = 0; i < resumeScoringSection.WordGroups.Count; i++)
+                    {
+                        Console.WriteLine(" Type={0} Name={1} Words={2} Weight={3} CaseSensitive={4}",
+                            resumeScoringSection.WordGroups[i].Type,
+                            resumeScoringSection.WordGroups[i].Name,
+                            resumeScoringSection.WordGroups[i].WordGroup,
+                            resumeScoringSection.WordGroups[i].Weight,
+                            resumeScoringSection.WordGroups[i].CaseSensitive);
+                    }
+                }
+
+            }
+            catch (ConfigurationErrorsException err)
+            {
+                Console.WriteLine("ReadCustomSection(string): {0}", err.ToString());
+            }
         }
 
         public static void GetApplicants()
