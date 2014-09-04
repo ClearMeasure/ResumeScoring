@@ -22,8 +22,8 @@ namespace ResumatorResumeScoring
 
             Start();
             //GetOneResume();
-            //GetApplicants();
-            TestScoring();
+            GetApplicants();
+            //TestScoring();
             Stop();
 
             Console.ReadLine();
