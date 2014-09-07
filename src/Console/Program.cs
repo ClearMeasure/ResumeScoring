@@ -22,8 +22,8 @@ namespace ResumatorResumeScoring
 
             Start();
             //GetOneResume();
-            GetApplicants();
-            //TestScoring();
+            //GetApplicants();
+            TestScoring();
             Stop();
 
             Console.ReadLine();
@@ -34,25 +34,21 @@ namespace ResumatorResumeScoring
         {
             Console.WriteLine("Testing scoring...");
             string applicantId = "prospect_20140425142614_5UXIDTMYAUZT611H";
-            Applicant result = ApplicantRepository.GetApplicant(applicantId, ApiKey);
+            Applicant applicant = ApplicantRepository.GetApplicant(applicantId, ApiKey);
 
-            string resume = FileService.GetTextFromUrl(ResumeFolder, result.resume_link);
-            ScoringService scoring = new ScoringService();
-            var report = scoring.Score(resume);
+            Console.WriteLine(applicant.first_name + " " + applicant.last_name + "'s resume is being scored...");
 
-            int score = 0;
+            string resume = FileService.GetTextFromUrl(ResumeFolder, applicant.resume_link);
+            ScoringService scoring = new ScoringService(resume);
+            var report = scoring.Score();
 
-            foreach (ReportItem reportItem in report.GetReportItems())
+            //print the interesting stats
+            foreach (WordStat stat in report.GetItemsOfSignificance())
             {
-                foreach (WordStat stat in reportItem.GetStats())
-                {
-                    Console.WriteLine("Word: " + stat.Word + " Count: " + stat.Count + " Weight: " + stat.Weight + " " + stat.Type);
-                    
-                    if(stat.Count > 0)
-                        score += stat.Weight;
-                }
+                Console.WriteLine("Word: " + stat.Word + " Count: " + stat.Count + " Weight: " + stat.Weight + " " + stat.Type);
             }
-            Console.WriteLine("SCORE: " + score);
+
+            Console.WriteLine("SCORE: " + report.GetScore());
             Console.WriteLine("Done testing scoring.");
         }
 

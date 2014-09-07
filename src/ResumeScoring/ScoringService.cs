@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Text.RegularExpressions;
 using ResumeScoring.Config;
 
@@ -8,7 +9,15 @@ namespace ResumeScoring
 {
     public class ScoringService
     {
-        public ScoringReport Score(string resume)
+        private string _resume;
+        private ScoringReport _report;
+        public ScoringService(string resume)
+        {
+            _resume = resume;
+            _report = new ScoringReport();
+        }
+
+        public ScoringReport Score()
         {
             ScoringReport report = new ScoringReport();
 
@@ -23,38 +32,42 @@ namespace ResumeScoring
                 {
                     WordGroupConfigElement wg = resumeScoringSection.WordGroups[i];
 
-                    report.AddReportItem(Score(wg, resume));
-
-                    Console.WriteLine(" Type={0} Name={1} Words={2} Weight={3} CaseSensitive={4}",
-                        resumeScoringSection.WordGroups[i].Type,
-                        resumeScoringSection.WordGroups[i].Name,
-                        resumeScoringSection.WordGroups[i].WordGroup,
-                        resumeScoringSection.WordGroups[i].Weight,
-                        resumeScoringSection.WordGroups[i].CaseSensitive);
+                    report.AddReportItem(ScoreWordGroup(wg, _resume));
                 }
             }
 
+            _report = report;
             return report;
         }
 
-        private ReportItem Score(WordGroupConfigElement wge, string resume)
+        private ReportItem ScoreWordGroup(WordGroupConfigElement wge, string resume)
         {
             ReportItem item = new ReportItem();
             string[] words = wge.WordGroup.Split(',');
             int weight = wge.Weight;
+
             string type = wge.Type;
+
             bool sensitive = Convert.ToBoolean(wge.CaseSensitive);
 
             foreach (string word in words)
             {
                 int cnt = 0;
 
-                    if(sensitive)
-                        cnt = Regex.Matches(resume, word).Count;    
-                    else
-                        cnt = Regex.Matches(resume, word, RegexOptions.IgnoreCase).Count;
+                if(sensitive)
+                    cnt = Regex.Matches(resume, word).Count;    
+                else
+                    cnt = Regex.Matches(resume, word, RegexOptions.IgnoreCase).Count;
 
+                //TODO: make a word stat first
+                //TODO: use wordstat . isimportant
+                //TODO: remove comparison logic here so that we only do it in once place
+
+                //filter noise
+                if ((type == "HIT" && cnt > 0) || (type == "MISS" && cnt == 0))
+                {
                     item.AddWordStats(type, word, weight, cnt);
+                }
             }
 
             return item;
@@ -77,6 +90,36 @@ namespace ResumeScoring
         public List<ReportItem> GetReportItems()
         {
             return _items;
+        }
+
+        public int GetScore()
+        {
+            int score = 0;
+
+            foreach (ReportItem reportItem in GetReportItems())
+            {
+                foreach (WordStat stat in reportItem.GetStats())
+                {
+                    if (stat.IsImportant())
+                    {
+                        score += stat.Weight;
+                    }
+                }
+            }
+
+            return score;
+        }
+
+        public List<WordStat> GetItemsOfSignificance()
+        {
+            List<WordStat> stats =
+                GetReportItems()
+                    .SelectMany(
+                        w =>
+                            w.GetStats()
+                                .Where(s => s.IsImportant())).ToList();
+
+            return stats;
         }
     }
 
@@ -113,5 +156,13 @@ namespace ResumeScoring
         public string Word { get; set; }
         public int Weight { get; set; }
         public int Count { get; set; }
+
+        public bool IsImportant()
+        {
+            if ((Type == "HIT" && Count > 0) || (Type == "MISS" && Count == 0))
+                return true;
+
+            return false;
+        }
     }
 }
